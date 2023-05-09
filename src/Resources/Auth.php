@@ -7,16 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class Auth extends JsonResource
 {
     /**
-     * @OA\Schema(
-     *  schema="AuthUser",
-     *  title="Auth User",
-     *  type="object",
-     *  @OA\Property(
-     *      property="access_token",
-     *      type="string",
-     *      example="1|KSADUY45654LKYTACZ",
-     *  )
-     * )
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request

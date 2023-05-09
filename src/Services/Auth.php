@@ -12,6 +12,14 @@ use Laravel\Sanctum\NewAccessToken;
 
 class Auth
 {
+    /**
+     * Assert authenticate
+     *
+     * @param array $credentials
+     * @param string|null $type
+     *
+     * @return \Laravel\Sanctum\NewAccessToken
+     */
     public static function assertAuthenticate(
         array $credentials,
         string $type = null
@@ -33,24 +41,31 @@ class Auth
      *
      * @param AuthModel $user
      * @param string|null $type
+     * 
+     * @return void
+     *
      * @throws \Dmn\Modules\Auth\Exceptions\InvalidCredentialsException
      * @throws \Dmn\Modules\Auth\Exceptions\AuthenticationAssertionException
-     * @return void
      */
     protected function assertUser(AuthModel $user, string $type = null): void
     {
-        if (is_null($type)) {
-            return;
-        }
+        $this->assertType($user, $type);
+        $this->assertCondition($user, $type);
+    }
 
-        $config = config("dmn_mod_auth.types.$type");
-
-        $userType = strtolower($user->{$user->getTypeIdentifier()});
-
-        if ($userType !== $type) {
-            throw new InvalidCredentialsException();
-        }
-
+    /**
+     * Assert condition
+     *
+     * @param \Dmn\Modules\Auth\Contracts\AuthModel $user
+     * @param string|null $type
+     * 
+     * @return void
+     * 
+     * @throws \Dmn\Modules\Auth\Exceptions\AuthenticationAssertionException
+     */
+    protected function assertCondition(AuthModel $user, string $type = null): void
+    {
+        $config = (config("dmn_mod_auth.types.$type") ?? config('dmn_mod_auth.default')) ?? [];
         $userArr = Arr::only($user->toArray(), array_keys($config));
 
         $diff = array_diff($userArr, $config);
@@ -59,6 +74,29 @@ class Auth
             $exception = new AuthenticationAssertionException();
             $exception->setUserData($user->toArray());
             throw $exception;
+        }
+    }
+
+    /**
+     * Assert Type
+     * 
+     * @param \Dmn\Modules\Auth\Contracts\AuthModel $user
+     * @param string $type
+     *
+     * @return void
+     *
+     * @throws \Dmn\Modules\Auth\Exceptions\InvalidCredentialsException
+     */
+    protected function assertType(AuthModel $user, string $type = null): void
+    {
+        if (is_null($type)) {
+            return;
+        }
+
+        $userType = strtolower($user->{$user->getTypeIdentifier()});
+
+        if ($userType !== $type) {
+            throw new InvalidCredentialsException();
         }
     }
 

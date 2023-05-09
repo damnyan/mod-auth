@@ -4,4 +4,7 @@ return [
     'types' => [
         //
     ],
+    'default' => [
+
+    ],
 ];

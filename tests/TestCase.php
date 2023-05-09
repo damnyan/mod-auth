@@ -18,6 +18,9 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         Config::set('auth.providers.users.model', \Tests\Examples\Models\User::class);
+        Config::set('dmn_mod_auth.default', [
+            'is_active' => true
+        ]);
         return [
             ServiceProvider::class,
         ];

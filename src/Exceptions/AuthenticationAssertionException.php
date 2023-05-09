@@ -15,6 +15,12 @@ class AuthenticationAssertionException extends Exception
 
     public readonly array $userData;
 
+    /**
+     * Set user data
+     *
+     * @param array $userData
+     * @return void
+     */
     public function setUserData(array $userData): void
     {
         $this->userData = $userData;
