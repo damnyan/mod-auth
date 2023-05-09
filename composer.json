@@ -1,0 +1,30 @@
+{
+    "name": "dmn/mod-auth",
+    "description": "Auth module for Laravel 10+",
+    "type": "package",
+    "require-dev": {
+        "phpunit/phpunit": "^10.1",
+        "orchestra/testbench": "^8.5"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Dmn\\Modules\\Auth\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dc",
+            "email": "damnyan@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/sanctum": "^3.2",
+        "dmn/laravel-exception": "^1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
