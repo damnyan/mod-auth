@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 use Tests\Examples\Models\User;
 use Tests\TestCase;
 
@@ -64,5 +65,29 @@ class AuthTest extends TestCase
         $this->assertEquals('invalid_credentials', $response->json('error'));
         $this->assertEquals('Invalid credentials.', $response->json('message'));
         $this->assertEquals('Invalid credentials.', $response->json('description'));
+    }
+
+    /**
+     * @test
+     * @testdox It can logout
+     *
+     * @return void
+     */
+    public function logout(): void
+    {
+        $user = User::create([
+            'email' => 'email@email.com',
+            'password' => Hash::make('123123123'),
+            'name' => 'test',
+            'is_active' => true
+        ]);
+
+        Sanctum::actingAs($user);
+
+        $response = $this->deleteJson(
+            route('auth.logout')
+        );
+
+        $response->assertNoContent();
     }
 }

@@ -21,6 +21,15 @@ class TestCase extends BaseTestCase
         Config::set('dmn_mod_auth.default', [
             'is_active' => true
         ]);
+
+        $guards = config('auth.guards');
+        $guards['sanctum'] = [
+            'driver' => 'session',
+            'provider' => 'users',
+        ];
+
+        Config::set('auth.guards', $guards);
+
         return [
             ServiceProvider::class,
         ];
