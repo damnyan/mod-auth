@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Tests\Examples\Models\User;
 use Tests\TestCase;
@@ -30,6 +29,7 @@ class AuthTest extends TestCase
             'email' => 'email@email.com',
             'password' => Hash::make('123123123'),
             'name' => 'test',
+            'is_active' => true
         ]);
 
         $response = $this->postJson(
@@ -56,6 +56,7 @@ class AuthTest extends TestCase
             [
                 'email' => 'test@email.com',
                 'password' => '123123123',
+                'is_active' => true
             ]
         );
 

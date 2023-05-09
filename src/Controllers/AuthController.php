@@ -18,28 +18,29 @@ class AuthController extends Controller
      * @param \Dmn\Modules\Auth\Requests\LoginRequest $request
      * @return \Dmn\Modules\Auth\Resources\Auth
      */
-    public function login(LoginRequest $request): ResourcesAuth
+    public function login(LoginRequest $request, string $type = null): ResourcesAuth
     {
-        $token = $this->auth($request);
-        return new ResourcesAuth($token);
+        $auth = ServicesAuth::assertAuthenticate($request->validated(), $type);
+        return new ResourcesAuth($auth);
     }
 
     /**
      * Auth
      *
      * @param \Dmn\Modules\Auth\Requests\LoginRequest $request
+     * @param string $type
      *
      * @return \Laravel\Sanctum\NewAccessToken
      */
-    protected function auth(LoginRequest $request): NewAccessToken
-    {
-        if (false === Auth::attempt($request->validated())) {
-            throw new InvalidCredentialsException();
-        }
+    // protected function auth(LoginRequest $request, string $type = null): NewAccessToken
+    // {
+    //     if (false === Auth::attempt($request->validated())) {
+    //         throw new InvalidCredentialsException();
+    //     }
 
-        $user = Auth::user();
+    //     $user = Auth::user();
+    //     $config = config("dmn_mod_auth.types.$type");
 
-
-        return ServicesAuth::authenticate($user);
-    }
+    //     return 
+    // }
 }
