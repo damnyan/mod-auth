@@ -28,11 +28,11 @@ class TestCase extends BaseTestCase
     protected function getEnvironmentSetUp($app)
     {
         Config::set('auth.providers.users.model', \Tests\Examples\Models\User::class);
-        Config::set('dmn_mod_auth.default', [
+        Config::set('dmod_auth.default', [
             'is_active' => true
         ]);
-        Config::set('dmn_mod_auth.types', []);
-        Config::set('dmn_mod_auth.routes.prefix', 'api');
+        Config::set('dmod_auth.types', []);
+        Config::set('dmod_auth.routes.prefix', 'api');
 
         $guards = config('auth.guards');
         $guards['sanctum'] = [

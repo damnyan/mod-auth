@@ -5,7 +5,7 @@ use Dmn\Modules\Auth\Requests\LoginRequest;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
-$config = Config::get('dmn_mod_auth');
+$config = Config::get('dmod_auth');
 $types = $config['types'];
 $prefix = $config['routes']['prefix'];
 if (!empty($types)) {

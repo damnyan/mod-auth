@@ -33,7 +33,7 @@ class AuthTypeTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
-        Config::set('dmn_mod_auth.types', [
+        Config::set('dmod_auth.types', [
             'client' => [
                 'is_active' => true,
             ],

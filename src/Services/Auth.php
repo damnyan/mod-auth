@@ -65,7 +65,7 @@ class Auth
      */
     protected function assertCondition(AuthModel $user, string $type = null): void
     {
-        $config = (config("dmn_mod_auth.types.$type") ?? config('dmn_mod_auth.default')) ?? [];
+        $config = (config("dmod_auth.types.$type") ?? config('dmod_auth.default')) ?? [];
         $userArr = Arr::only($user->toArray(), array_keys($config));
 
         $diff = array_diff($userArr, $config);
