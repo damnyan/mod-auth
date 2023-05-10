@@ -11,6 +11,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot(): void
     {
+        // $enableRoutes = $this->app['config']['dmn_mod_auth.enable_routes'] ?? true;
+        // dd($enableRoutes);
         $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
     }
 }

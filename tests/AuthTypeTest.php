@@ -24,6 +24,15 @@ class AuthTypeTest extends TestCase
      */
     protected function getPackageProviders($app)
     {
+        return parent::getPackageProviders($app);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        parent::getEnvironmentSetUp($app);
         Config::set('dmn_mod_auth.types', [
             'client' => [
                 'is_active' => true,
@@ -32,7 +41,6 @@ class AuthTypeTest extends TestCase
                 'is_active' => true,
             ],
         ]);
-        return parent::getPackageProviders($app);
     }
 
     /**
@@ -43,7 +51,7 @@ class AuthTypeTest extends TestCase
      */
     public function mismatchedType(): void
     {
-        $user = User::create([
+        User::create([
             'email' => 'email@email.com',
             'type' => 'admin',
             'is_active' => false,

@@ -17,6 +17,16 @@ class TestCase extends BaseTestCase
      */
     protected function getPackageProviders($app)
     {
+        return [
+            ServiceProvider::class,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getEnvironmentSetUp($app)
+    {
         Config::set('auth.providers.users.model', \Tests\Examples\Models\User::class);
         Config::set('dmn_mod_auth.default', [
             'is_active' => true
@@ -29,10 +39,6 @@ class TestCase extends BaseTestCase
         ];
 
         Config::set('auth.guards', $guards);
-
-        return [
-            ServiceProvider::class,
-        ];
     }
 
     /**
