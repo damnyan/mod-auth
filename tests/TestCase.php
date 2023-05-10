@@ -33,6 +33,7 @@ class TestCase extends BaseTestCase
         ]);
         Config::set('dmod_auth.types', []);
         Config::set('dmod_auth.routes.prefix', 'api');
+        Config::set('dmod_auth.routes.enabled', true);
 
         $guards = config('auth.guards');
         $guards['sanctum'] = [

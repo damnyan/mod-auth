@@ -11,12 +11,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app['config']['dmod_auth.routes.enabled'] ?? true) {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
-        }
-
         $this->publishes([
             __DIR__.'/../config/config.php' => config_path('dmod_auth.php')
         ], 'dmod-config');
+
+        if ($this->app['config']['dmod_auth.routes.enabled'] ?? false) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
+        }
     }
 }
