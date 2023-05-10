@@ -31,6 +31,8 @@ class TestCase extends BaseTestCase
         Config::set('dmn_mod_auth.default', [
             'is_active' => true
         ]);
+        Config::set('dmn_mod_auth.types', []);
+        Config::set('dmn_mod_auth.routes.prefix', 'api');
 
         $guards = config('auth.guards');
         $guards['sanctum'] = [

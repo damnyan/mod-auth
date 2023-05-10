@@ -1,7 +1,11 @@
 <?php
 
 return [
-    'enable_routes' => true,
+    'routes' => [
+        'prefix' => 'api',
+        'enabled' => true,
+        'middleware' => [],
+    ],
     'types' => [
         //
     ],
