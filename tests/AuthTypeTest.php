@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Carbon\Carbon;
 use Dmn\Modules\Auth\Exceptions\AuthenticationAssertionException;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -35,10 +36,18 @@ class AuthTypeTest extends TestCase
         parent::getEnvironmentSetUp($app);
         Config::set('dmod_auth.types', [
             'client' => [
+                'email_verified_at' => '!null',
                 'is_active' => true,
             ],
             'admin' => [
-                'is_active' => true,
+                'email_verified_at' => ['!==', null],
+                'is_active' => ['===', true],
+                'type' => 'admin',
+                'col_string' => ['===', 'this is string'],
+                'col_int' => ['===', 123],
+            ],
+            'string' => [
+                'type' => 'admin',
             ],
         ]);
     }
@@ -54,7 +63,7 @@ class AuthTypeTest extends TestCase
         User::create([
             'email' => 'email@email.com',
             'type' => 'admin',
-            'is_active' => false,
+            'is_active' => true,
             'password' => Hash::make('123123123'),
         ]);
 
@@ -71,11 +80,38 @@ class AuthTypeTest extends TestCase
 
     /**
      * @test
-     * @testdox It can handle mismatched wheres
+     * @testdox It can succesfully login with matching wheres
      *
      * @return void
      */
-    public function mismatchedWheres(): void
+    public function matchedWheres(): void
+    {
+        User::create([
+            'email' => 'email@email.com',
+            'type' => 'admin',
+            'is_active' => true,
+            'password' => Hash::make('123123123'),
+            'email_verified_at' => new Carbon(),
+        ]);
+
+        $response = $this->postJson(
+            route('auth.login.admin'),
+            [
+                'email' => 'email@email.com',
+                'password' => '123123123',
+            ]
+        );
+
+        $response->assertCreated();
+    }
+
+    /**
+     * @test
+     * @testdox It can handle mismatched wheres with Array
+     *
+     * @return void
+     */
+    public function mismatchedWheresWithArray(): void
     {
         $this->withoutExceptionHandling();
         User::create([
@@ -88,6 +124,35 @@ class AuthTypeTest extends TestCase
         try {
             $this->postJson(
                 route('auth.login.admin'),
+                [
+                    'email' => 'email@email.com',
+                    'password' => '123123123',
+                ]
+            );
+        } catch (AuthenticationAssertionException $e) {
+            $this->assertIsArray($e->userData);
+        }
+    }
+
+    /**
+     * @test
+     * @testdox It can handle mismatched wheres for string
+     *
+     * @return void
+     */
+    public function mismatchedWheresForString(): void
+    {
+        $this->withoutExceptionHandling();
+        User::create([
+            'email' => 'email@email.com',
+            'type' => 'string',
+            'is_active' => false,
+            'password' => Hash::make('123123123'),
+        ]);
+
+        try {
+            $this->postJson(
+                route('auth.login.string'),
                 [
                     'email' => 'email@email.com',
                     'password' => '123123123',

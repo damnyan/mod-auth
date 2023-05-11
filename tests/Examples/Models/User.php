@@ -21,10 +21,12 @@ class User extends Authenticatable implements AuthModel
         'password',
         'type',
         'is_active',
+        'email_verified_at',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'email_verified_at' => 'datetime',
     ];
 
     public function getTypeIdentifier(): string

@@ -3,6 +3,7 @@
 namespace Dmn\Modules\Auth\Services;
 
 use Carbon\Carbon;
+use DateTime;
 use Dmn\Modules\Auth\Contracts\AuthModel;
 use Dmn\Modules\Auth\Exceptions\AuthenticationAssertionException;
 use Dmn\Modules\Auth\Exceptions\InvalidCredentialsException;
@@ -65,16 +66,78 @@ class Auth
      */
     protected function assertCondition(AuthModel $user, string $type = null): void
     {
-        $config = (config("dmod_auth.types.$type") ?? config('dmod_auth.default')) ?? [];
-        $userArr = Arr::only($user->toArray(), array_keys($config));
+        $assertions = (config("dmod_auth.types.$type") ?? config('dmod_auth.default')) ?? [];
+        foreach ($assertions as $col => $value) {
+            if (is_array($value)) {
+                $this->arrayAssertion($user, $col, $value);
+                continue;
+            }
 
-        $diff = array_diff($userArr, $config);
-
-        if (count($diff) > 0) {
-            $exception = new AuthenticationAssertionException();
-            $exception->setUserData($user->toArray());
-            throw $exception;
+            if ($user->$col !== $value) {
+                $this->failedAssertion($user);
+            }
         }
+    }
+
+    /**
+     * Array assertion
+     *
+     * @param \Dmn\Modules\Auth\Contracts\AuthModel $user
+     * @param string $col
+     * @param array $value
+     * @return void
+     */
+    protected function arrayAssertion(AuthModel $user, string $col, array $value): void
+    {
+        [$cond, $val] = $value;
+        $userVal = $this->stringify($user->$col);
+        $val = $this->stringify($val);
+        $condition = "return $userVal $cond $val;";
+        if (false === eval($condition)) {
+            $this->failedAssertion($user);
+        }
+    }
+
+    /**
+     * Stringify
+     *
+     * @param mixed $value
+     * @return void
+     */
+    protected function stringify($value): string
+    {
+        if (is_null($value)) {
+            return 'null';
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if (is_string($value)) {
+            return "\"$value\"";
+        }
+
+        if ($value instanceof DateTime) {
+            $value = $value->format('Y-m-d H:i:s');
+            return "\"$value\"";
+        }
+
+        return $value;
+    }
+
+    /**
+     * Failed assertion
+     *
+     * @param \Dmn\Modules\Auth\Contracts\AuthModel $user
+     * @return void
+     * @throws \Dmn\Modules\Auth\Exceptions\AuthenticationAssertionException
+     */
+    protected function failedAssertion(AuthModel $user): void
+    {
+        $exception = new AuthenticationAssertionException();
+        $exception->setUserData($user->toArray());
+        throw $exception;
     }
 
     /**

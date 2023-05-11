@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('password', 64);
             $table->string('type', 12)->nullable();
             $table->boolean('is_active', true);
+            $table->string('col_string')->default('this is string');
+            $table->integer('col_int')->default(123);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
