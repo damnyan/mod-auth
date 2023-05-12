@@ -16,7 +16,7 @@ class ServiceProvider extends BaseServiceProvider
         ], 'dmod-auth-config');
 
         $this->publishes([
-            __DIR__.'/../swag_docs/AuthVendor.php' => base_path('swag_docs/DModAuth.php')
+            __DIR__.'/../swag_docs/DModAuth.php' => base_path('swag_docs/DModAuth.php')
         ], 'dmod-auth-swag');
 
         if ($this->app['config']['dmod_auth.routes.enabled'] ?? false) {
