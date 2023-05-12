@@ -37,7 +37,7 @@ namespace SwagDocs;
  * )
  *
  * @OA\Post(
- *  tags={"Auth Vendor"},
+ *  tags={"Auth"},
  *  path="/api/auth/login",
  *  description="Login",
  *  @OA\RequestBody(
@@ -64,7 +64,7 @@ namespace SwagDocs;
  * ),
  *
  * @OA\Delete(
- *  tags={"Auth Vendor"},
+ *  tags={"Auth"},
  *  path="/api/auth/logout",
  *  description="Logout",
  *  @OA\Response(
