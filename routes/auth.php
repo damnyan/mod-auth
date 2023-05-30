@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Route;
 $config = Config::get('dmod_auth');
 $types = $config['types'];
 $prefix = $config['routes']['prefix'];
+
+Route::delete("$prefix/auth/logout", [AuthController::class, 'logout'])
+    ->middleware(['auth:sanctum'])
+    ->name('auth.logout');
+
 if (!empty($types)) {
     foreach ($types as $type => $wheres) {
         Route::post("$prefix/auth/login/$type", function (LoginRequest $request) use ($type) {
@@ -18,6 +23,3 @@ if (!empty($types)) {
     return;
 }
 Route::post("$prefix/auth/login", [AuthController::class, 'login'])->name('auth.login');
-Route::delete("$prefix/auth/logout", [AuthController::class, 'logout'])
-    ->middleware(['auth:sanctum'])
-    ->name('auth.logout');
